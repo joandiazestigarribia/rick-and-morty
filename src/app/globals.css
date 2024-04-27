@@ -83,7 +83,7 @@ body {
   /* background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
-  background-color: #353535;
+  background-color: #043c6e;
 }
 
 a {
@@ -97,18 +97,47 @@ a {
   }
 } */
 
+.Main {
+  position: relative;
+  background-color: #252525;
+  z-index: 0;
+}
+
+.BackgroundImage {
+  z-index: -5;
+  /* position: absolute; */
+  position: fixed;
+  width: auto;
+  height: auto;
+  right: 0;
+  opacity: 0.3;
+}
+
+.DivLogo {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0 1rem;
+}
 
 .DivColumnsContainer {
   display: flex;
+  margin-top: 1rem;
 }
 
 .DivColumns {
   width: 100%;
 }
 
+.DivColumnLeft {
+  border-right: 2px solid #202021;
+}
+
 .DivColumns h2 {
   width: fit-content;
-  margin: 2rem auto;
+  margin: 0.5rem auto 2rem;
+  color: #00c0d9;
+  font-size: 20px;
+  letter-spacing: 2px;
 }
 
 .ColumnCards {
@@ -129,6 +158,8 @@ a {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transition: all 0.25s;
+  row-gap: 5px;
+  max-width: 200px;
 }
 
 .DivCharacter:hover {
@@ -137,7 +168,34 @@ a {
 }
 
 .DivSelectedCharacter {
-  border: 2px solid #3678d7;
+  border: 2px solid #52db2c;
+}
+
+.DivCharacterInfo,
+.ListEpisodesInfo {
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+}
+
+.ListEpisodesInfo,
+.NoEpisodesFound {
+  text-align: center;
+}
+
+.DivNoEpisodesFound {
+  padding: 10px 0 0;
+}
+
+.DivCharacterInfo:last-child {
+  margin-bottom: 12px;
+}
+
+.CharacterInfo {
+  font-weight: 600;
+  color: #00c0d9;
 }
 
 .DivPaginator {
@@ -156,6 +214,11 @@ a {
   display: flex;
 }
 
+.DivPaginator li.active a {
+  font-weight: 700;
+  color: #00c0d9;
+}
+
 .DivPaginator li::marker {
   display: none;
 }
@@ -166,16 +229,128 @@ a {
 
 .DivEpisodes {
   display: grid;
-  grid-template-columns: 35% 35% 35%;
+  grid-template-columns: 30% 30% 30%;
   min-height: 30rem;
   margin-top: 3rem;
+  column-gap: 3%;
+  justify-content: center;
 }
 
 .DivEpisodes h2 {
-  font-size: 22px;
-  margin-bottom: 2rem;
+  width: fit-content;
+  color: #00c0d9;
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin: 0 auto 2rem;
+  text-align: center;
 }
 
-.DivEpisodes button {
-  margin-top: 10px;
+.DivListEpisodes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 5px;
+  padding: 10px 0 10px;
+  border-bottom: 1px solid #fff;
+}
+
+.DivListEpisodes:last-child {
+  border: none;
+}
+
+.EpisodesInfo {
+  font-weight: 700;
+}
+
+.DivButtonShowMore {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 3rem;
+}
+
+.DivButtonShowMore button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 15px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+}
+
+.DivButtonShowMore button:hover {
+  border: 2px solid #52db2c;
+  color: #52db2c;
+  font-weight: 700;
+}
+
+.SelectBothCharacters {
+  display: flex;
+  justify-content: center;
+}
+
+.Toastify__progress-bar--error {
+  background: #00c0d9 !important;
+}
+
+/* Desk - Big Screen */
+@media(width >= 1600px) {
+  .Container {
+    background-color: #252525;
+  }
+
+  .Main {
+    max-width: 1500px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+}
+
+/* Desk */
+
+@media(width >=768px) {
+  .DivCharacterInfo {
+    text-align: center;
+  }
+}
+
+
+/* Tablet & Mobile */
+
+@media(1024px >=width) {
+  .DivColumnsContainer {
+    flex-direction: column;
+  }
+
+
+  .DivEpisodes {
+    grid-template-columns: 50% 50%;
+    width: 95%;
+    margin: 4rem auto 0;
+    text-align: center;
+  }
+
+  .DivEpisodes h2 {
+    font-size: 15px;
+    height: 50px;
+    align-content: center;
+    margin-bottom: 1.3rem;
+  }
+
+  .DivCharacterInfo {
+    margin-left: 5px;
+  }
+
+  .DivCharacter {
+    width: 92%;
+    align-items: flex-start;
+  }
+
+  .DivColumnRight {
+    margin-top: 4rem;
+  }
 }

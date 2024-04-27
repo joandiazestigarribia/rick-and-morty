@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Paginator from './Paginator';
 import { useCharacterContext } from './CharacterContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image';
 
 const MainComponent: React.FC = () => {
   const { selectedCharacter, setSelectedCharacter } = useCharacterContext();
@@ -104,8 +107,7 @@ const MainComponent: React.FC = () => {
 
   const handleLeftCharacterClick = (character: any) => {
     if (selectedRightCharacter && selectedRightCharacter.id === character.id) {
-      // Si el personaje seleccionado en la columna izquierda es el mismo que el seleccionado en la derecha, muestra una alerta
-      alert('You cannot select the same character in both columns.');
+      toast.error('You cannot select the same character in both columns.')
     } else {
       setSelectedLeftCharacter(character);
     }
@@ -113,8 +115,7 @@ const MainComponent: React.FC = () => {
 
   const handleRightCharacterClick = (character: any) => {
     if (selectedLeftCharacter && selectedLeftCharacter.id === character.id) {
-      // Si el personaje seleccionado en la columna derecha es el mismo que el seleccionado en la izquierda, muestra una alerta
-      alert('You cannot select the same character in both columns.');
+      toast.error('You cannot select the same character in both columns.')
     } else {
       setSelectedRightCharacter(character);
     }
@@ -159,167 +160,188 @@ const MainComponent: React.FC = () => {
   };
 
   return (
-    <div className='Main'>
-      <div className='DivColumnsContainer'>
-        <div className='DivColumns DivColumnLeft'>
-          <h2>Character #1</h2>
-          <div className='ColumnCards'>
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <>
-                {leftCharacters.length > 0 ? (
-                  leftCharacters.map((character: any, index: number) => (
-                    <div key={index} onClick={() => handleLeftCharacterClick(character)}
-                      className={selectedLeftCharacter === character ? 'DivSelectedCharacter DivCharacter' : 'DivCharacter'}>
-                      <div>
-                        <img src={character.image} alt={character.name} style={{ width: '200px', height: '200px' }} />
+    <div className='Container'>
+      <div className='Main'>
+        <Image src="/fondo-rick-and-morty-2.jpg" alt="Fondo" width={1000} height={700} className='BackgroundImage' />
+        <div className='DivLogo'>
+          <Image src="/logo-rick-and-morty-2.png" alt="My Image" width={384} height={149} />
+        </div>
+        <div className='DivColumnsContainer'>
+          <div className='DivColumns DivColumnLeft'>
+            <h2>CHARACTER #1</h2>
+            <div className='ColumnCards'>
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
+                <>
+                  {leftCharacters.length > 0 ? (
+                    leftCharacters.map((character: any, index: number) => (
+                      <div key={index} onClick={() => handleLeftCharacterClick(character)}
+                        className={selectedLeftCharacter === character ? 'DivSelectedCharacter DivCharacter' : 'DivCharacter'}>
+                        <div>
+                          <img src={character.image} alt={character.name} style={{ width: '200px', height: '200px' }} />
+                        </div>
+                        <div className='DivName DivCharacterInfo'>
+                          Name: <span className='Name CharacterInfo'>{character.name}</span>
+                        </div>
+                        <div className='DivStatus DivCharacterInfo'>
+                          Status: <span className='Status CharacterInfo'>{character.status}</span>
+                        </div>
+                        <div className='DivSpecies DivCharacterInfo'>
+                          Species: <span className='Species CharacterInfo'>{character.species}</span>
+                        </div>
                       </div>
-                      <div>
-                        Name: {character.name}
+                    ))
+                  ) : (
+                    <div>No characters found.</div>
+                  )}
+
+                </>
+              )}
+            </div>
+            <div className='DivPaginator'>
+              <Paginator totalPages={totalPages} onPageChange={handleLeftPageChange} />
+            </div>
+          </div>
+          <div className='DivColumns DivColumnRight'>
+            <h2>CHARACTER #2</h2>
+            <div className='ColumnCards'>
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
+                <>
+                  {rightCharacters.length > 0 ? (
+                    rightCharacters.map((character: any, index: number) => (
+                      <div key={index} onClick={() => handleRightCharacterClick(character)}
+                        className={selectedRightCharacter === character ? 'DivSelectedCharacter DivCharacter' : 'DivCharacter'}>
+                        <div>
+                          <img src={character.image} alt={character.name} style={{ width: '200px', height: '200px' }} />
+                        </div>
+                        <div className='DivName DivCharacterInfo'>
+                          Name: <span className='Name CharacterInfo'>{character.name}</span>
+                        </div>
+                        <div className='DivStatus DivCharacterInfo'>
+                          Status: <span className='Status CharacterInfo'>{character.status}</span>
+                        </div>
+                        <div className='DivSpecies DivCharacterInfo'>
+                          Species: <span className='Species CharacterInfo'>{character.species}</span>
+                        </div>
                       </div>
-                      <div>
-                        Status: {character.status}
+                    ))
+                  ) : (
+                    <div>No characters found.</div>
+                  )}
+                </>
+              )}
+            </div>
+            <div className='DivPaginator'>
+              <Paginator totalPages={totalPages} onPageChange={handleRightPageChange} />
+            </div>
+          </div>
+        </div>
+
+        <div className='DivEpisodes'>
+          <div>
+            <div style={{ flex: 1 }}>
+              <h2>Character #1 <br /> Only Episodes</h2>
+              {selectedLeftCharacter && selectedRightCharacter ? (
+                leftCharacterEpisodes.length > 0 ? (
+                  leftCharacterEpisodes.slice(0, showMoreLeftEpisodes ? leftCharacterEpisodes.length : maxResults).map((episode, index) => (
+                    <div key={index} className='DivListEpisodes'>
+                      <div className='ListEpisodesInfo'>
+                        Episode Name: <span className='Name EpisodesInfo'>{episode.name}</span>
                       </div>
-                      <div>
-                        Species: {character.species}
+                      <div className='ListEpisodesInfo'>
+                        Episode: <span className='Episode EpisodesInfo'>{episode.episode}</span>
                       </div>
-                      <hr />
+                      <div className='ListEpisodesInfo'>
+                        Episode Air Date: <span className='EpisodeAir EpisodesInfo'>{episode.air_date}</span>
+                      </div>
                     </div>
                   ))
                 ) : (
-                  <div>No characters found.</div>
-                )}
+                  <div>No episodes found for the selected character.</div>
+                )
+              ) : (
+                <div className='SelectBothCharacters'>Please select characters from both columns.</div>
+              )}
+            </div>
+            {selectedLeftCharacter && selectedRightCharacter && leftCharacterEpisodes.length > maxResults && (
+              <div className='DivButtonShowMore'>
+                <button onClick={toggleShowMoreLeftEpisodes}>{showMoreLeftEpisodes ? 'See Less' : 'See More'}</button>
+              </div>
 
-              </>
             )}
           </div>
-          <div className='DivPaginator'>
-            <Paginator totalPages={totalPages} onPageChange={handleLeftPageChange} />
-          </div>
-        </div>
-        <div className='DivColumns DivColumnRight'>
-          <h2>Character #2</h2>
-          <div className='ColumnCards'>
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <>
-                {rightCharacters.length > 0 ? (
-                  rightCharacters.map((character: any, index: number) => (
-                    <div key={index} onClick={() => handleRightCharacterClick(character)}
-                      className={selectedRightCharacter === character ? 'DivSelectedCharacter DivCharacter' : 'DivCharacter'}>
-                      <div>
-                        <img src={character.image} alt={character.name} style={{ width: '200px', height: '200px' }} />
+          <div>
+            <div style={{ flex: 1 }}>
+              <h2>Character #1 & Character #2 <br /> Shared Episodes</h2>
+              {selectedLeftCharacter && selectedRightCharacter ? (
+                sharedEpisodes.length > 0 ? (
+                  sharedEpisodes.slice(0, showMoreSharedEpisodes ? sharedEpisodes.length : maxResults).map((episode, index) => (
+                    <div key={index} className='DivListEpisodes'>
+                      <div className='ListEpisodesInfo'>
+                        Episode Name: <span className='Name EpisodesInfo'>{episode.name}</span>
                       </div>
-                      <div>
-                        Name: {character.name}
+                      <div className='ListEpisodesInfo'>
+                        Episode: <span className='Episode EpisodesInfo'>{episode.episode}</span>
                       </div>
-                      <div>
-                        Status: {character.status}
+                      <div className='ListEpisodesInfo'>
+                        Episode Air Date: <span className='EpisodeAir EpisodesInfo'>{episode.air_date}</span>
                       </div>
-                      <div>
-                        Species: {character.species}
-                      </div>
-                      <hr />
                     </div>
                   ))
                 ) : (
-                  <div>No characters found.</div>
-                )}
-              </>
+                  <div className='DivNoEpisodesFound'>
+                    <div className='NoEpisodesFound'>
+                      No shared episodes found.
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className='SelectBothCharacters'>Please select characters from both columns.</div>
+              )}
+
+            </div>
+            {selectedLeftCharacter && selectedRightCharacter && sharedEpisodes.length > maxResults && (
+              <div className='DivButtonShowMore'>
+                <button onClick={toggleShowMoreSharedEpisodes}>{showMoreSharedEpisodes ? 'See Less' : 'See More'}</button>
+              </div>
             )}
           </div>
-          <div className='DivPaginator'>
-            <Paginator totalPages={totalPages} onPageChange={handleRightPageChange} />
-          </div>
-        </div>
-      </div>
 
-      <div className='DivEpisodes'>
-        <div style={{ flex: 1 }}>
-          <h2>Character #1<br/>Only Episodes</h2>
-          {selectedLeftCharacter && selectedRightCharacter ? (
-            leftCharacterEpisodes.length > 0 ? (
-              leftCharacterEpisodes.slice(0, showMoreLeftEpisodes ? leftCharacterEpisodes.length : maxResults).map((episode, index) => (
-                <div key={index}>
-                  <div>
-                    Episode Name: {episode.name}
-                  </div>
-                  <div>
-                    Episode: {episode.episode}
-                  </div>
-                  <div>
-                    Episode Air Date: {episode.air_date}
-                  </div>
-                  <hr />
-                </div>
-              ))
-            ) : (
-              <div>No episodes found for the selected character.</div>
-            )
-          ) : (
-            <div>Please select characters from both Left and Right Columns.</div>
-          )}
-          {selectedLeftCharacter && selectedRightCharacter && leftCharacterEpisodes.length > maxResults && (
-            <button onClick={toggleShowMoreLeftEpisodes}>{showMoreLeftEpisodes ? 'See Less' : 'See More'}</button>
-          )}
-        </div>
-        <div style={{ flex: 1 }}>
-          <h2>Character #1 & Character #2 <br/> Shared Episodes</h2>
-          {selectedLeftCharacter && selectedRightCharacter ? (
-            sharedEpisodes.length > 0 ? (
-              sharedEpisodes.slice(0, showMoreSharedEpisodes ? sharedEpisodes.length : maxResults).map((episode, index) => (
-                <div key={index}>
-                  <div>
-                    Episode Name: {episode.name}
-                  </div>
-                  <div>
-                    Episode: {episode.episode}
-                  </div>
-                  <div>
-                    Episode Air Date: {episode.air_date}
-                  </div>
-                  <hr />
-                </div>
-              ))
-            ) : (
-              <div>No shared episodes found.</div>
-            )
-          ) : (
-            <div>Please select characters from both Left and Right Columns.</div>
-          )}
-          {selectedLeftCharacter && selectedRightCharacter && sharedEpisodes.length > maxResults && (
-            <button onClick={toggleShowMoreSharedEpisodes}>{showMoreSharedEpisodes ? 'See Less' : 'See More'}</button>
-          )}
-        </div>
-        <div style={{ flex: 1 }}>
-          <h2>Character #2 <br/> Only Episodes</h2>
-          {selectedLeftCharacter && selectedRightCharacter ? (
-            rightCharacterEpisodes.length > 0 ? (
-              rightCharacterEpisodes.slice(0, showMoreRightEpisodes ? rightCharacterEpisodes.length : maxResults).map((episode, index) => (
-                <div key={index}>
-                  <div>
-                    Episode Name: {episode.name}
-                  </div>
-                  <div>
-                    Episode: {episode.episode}
-                  </div>
-                  <div>
-                    Episode Air Date: {episode.air_date}
-                  </div>
-                  <hr />
-                </div>
-              ))
-            ) : (
-              <div>No episodes found for the selected character.</div>
-            )
-          ) : (
-            <div>Please select characters from both Left and Right Columns.</div>
-          )}
-          {selectedLeftCharacter && selectedRightCharacter && rightCharacterEpisodes.length > maxResults && (
-            <button onClick={toggleShowMoreRightEpisodes}>{showMoreRightEpisodes ? 'See Less' : 'See More'}</button>
-          )}
+          <div>
+            <div style={{ flex: 1 }}>
+              <h2>Character #2 <br /> Only Episodes</h2>
+              {selectedLeftCharacter && selectedRightCharacter ? (
+                rightCharacterEpisodes.length > 0 ? (
+                  rightCharacterEpisodes.slice(0, showMoreRightEpisodes ? rightCharacterEpisodes.length : maxResults).map((episode, index) => (
+                    <div key={index} className='DivListEpisodes'>
+                      <div className='ListEpisodesInfo'>
+                        Episode Name: <span className='Name EpisodesInfo'>{episode.name}</span>
+                      </div>
+                      <div className='ListEpisodesInfo'>
+                        Episode: <span className='Episode EpisodesInfo'>{episode.episode}</span>
+                      </div>
+                      <div className='ListEpisodesInfo'>
+                        Episode Air Date: <span className='EpisodeAir EpisodesInfo'>{episode.air_date}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div>No episodes found for the selected character.</div>
+                )
+              ) : (
+                <div className='SelectBothCharacters'>Please select characters from both columns.</div>
+              )}
+
+            </div>
+            {selectedLeftCharacter && selectedRightCharacter && rightCharacterEpisodes.length > maxResults && (
+              <div className='DivButtonShowMore'>
+                <button onClick={toggleShowMoreRightEpisodes}>{showMoreRightEpisodes ? 'See Less' : 'See More'}</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
