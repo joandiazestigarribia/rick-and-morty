@@ -1,13 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import Paginator from './Paginator';
-import { useCharacterContext } from './CharacterContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 
 const MainComponent: React.FC = () => {
-  const { selectedCharacter, setSelectedCharacter } = useCharacterContext();
   const [characters, setCharacters] = useState<any[]>([]);
   const [leftPage, setLeftPage] = useState<number>(1);
   const [rightPage, setRightPage] = useState<number>(1);
@@ -20,8 +18,8 @@ const MainComponent: React.FC = () => {
   const [showMoreSharedEpisodes, setShowMoreSharedEpisodes] = useState<boolean>(false);
   const [showMoreRightEpisodes, setShowMoreRightEpisodes] = useState<boolean>(false);
 
-  const pageSize = 4; // Number of characters per page
-  const maxResults = 5; // Maximum number of episodes to display initially
+  const pageSize = 4;
+  const maxResults = 5;
 
   useEffect(() => {
     const fetchDataCharacter = async () => {
@@ -29,7 +27,6 @@ const MainComponent: React.FC = () => {
         let allCharacters: any[] = [];
         let nextPage = 1;
 
-        // Fetch data from each page until all results are fetched
         while (nextPage <= totalPages) {
           const response = await fetch(`https://rickandmortyapi.com/api/character?page=${nextPage}`);
           if (response.ok) {
@@ -78,7 +75,6 @@ const MainComponent: React.FC = () => {
         let allEpisodes: any[] = [];
         let nextPage = 1;
 
-        // Fetch data from each page until all results are fetched
         while (nextPage <= totalPages) {
           const response = await fetch(`https://rickandmortyapi.com/api/episode?page=${nextPage}`);
           if (response.ok) {
@@ -101,10 +97,6 @@ const MainComponent: React.FC = () => {
   }, [totalPages]);
 
 
-  const handleCharacterClick = (character: any) => {
-    setSelectedCharacter(character);
-  };
-
   const handleLeftCharacterClick = (character: any) => {
     if (selectedRightCharacter && selectedRightCharacter.id === character.id) {
       toast.error('You cannot select the same character in both columns.')
@@ -123,9 +115,6 @@ const MainComponent: React.FC = () => {
 
   const leftCharacters = characters.slice((leftPage - 1) * pageSize, leftPage * pageSize);
   const rightCharacters = characters.slice((rightPage - 1) * pageSize, rightPage * pageSize);
-  const characterEpisodes = episodes.filter((episode: any) =>
-    episode.characters.includes(selectedCharacter?.url)
-  );
 
   const leftCharacterEpisodes = episodes.filter((episode) =>
     episode.characters.includes(selectedLeftCharacter?.url)
