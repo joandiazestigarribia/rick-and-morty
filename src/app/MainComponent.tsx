@@ -152,9 +152,9 @@ const MainComponent: React.FC = () => {
   return (
     <div className='Container'>
       <div className='Main'>
-        <Image src={`${prefix}/fondo-rick-and-morty-2.jpg`} alt="Fondo" width={1000} height={700} className='BackgroundImage' />
+        <Image src={`${prefix}fondo-rick-and-morty-2.jpg`} alt="Fondo" width={1000} height={700} className='BackgroundImage' />
         <div className='DivLogo'>
-          <Image src={`${prefix}/logo-rick-and-morty-2.png`} alt="My Image" width={384} height={149} />
+          <Image src={`${prefix}logo-rick-and-morty-2.png`} alt="My Image" width={384} height={149} />
         </div>
         <div className='DivColumnsContainer'>
           <div className='DivColumns DivColumnLeft'>
